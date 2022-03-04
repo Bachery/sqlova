@@ -4,3 +4,8 @@ sqlnet/__pycache__
 bert/__pycache__
 .idea
 *.swp
+
+.DS_Store
+.vscode
+data_and_model/*
+data/*

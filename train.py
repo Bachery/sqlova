@@ -34,12 +34,12 @@ def construct_hyper_param(parser):
     parser.add_argument("--trained", default=False, action='store_true')
 
     parser.add_argument('--tepoch', default=200, type=int)
-    parser.add_argument("--bS", default=32, type=int,
+    parser.add_argument("--bS", default=16, type=int,       ### 原本：32
                         help="Batch size")
-    parser.add_argument("--accumulate_gradients", default=1, type=int,
+    parser.add_argument("--accumulate_gradients", default=2, type=int,       ### 原本：1
                         help="The number of accumulation of backpropagation to effectivly increase the batch size.")
     parser.add_argument('--fine_tune',
-                        default=False,
+                        default=True,       ### 原本：False
                         action='store_true',
                         help="If present, BERT is trained.")
 
@@ -60,7 +60,7 @@ def construct_hyper_param(parser):
     parser.add_argument('--lr_bert', default=1e-5, type=float, help='BERT model learning rate.')
     parser.add_argument('--seed',
                         type=int,
-                        default=42,
+                        default=1,        ### 原本：42
                         help="random seed for initialization")
     parser.add_argument('--no_pretraining', action='store_true', help='Use BERT pretrained model')
     parser.add_argument("--bert_type_abb", default='uS', type=str,
@@ -652,16 +652,20 @@ if __name__ == '__main__':
     path_save_for_evaluation = './'
 
     ## 3. Load data
-
     train_data, train_table, dev_data, dev_table, train_loader, dev_loader = get_data(path_wikisql, args)
-    # test_data, test_table = load_wikisql_data(path_wikisql, mode='test', toy_model=args.toy_model, toy_size=args.toy_size, no_hs_tok=True)
-    # test_loader = torch.utils.data.DataLoader(
-    #     batch_size=args.bS,
-    #     dataset=test_data,
-    #     shuffle=False,
-    #     num_workers=4,
-    #     collate_fn=lambda x: x  # now dictionary values are not merged!
-    # )
+    ### 2022-03-03 test
+    test_data, test_table = load_wikisql_data(path_wikisql, mode='test', toy_model=args.toy_model, toy_size=args.toy_size, no_hs_tok=True)
+    def identify(x):
+        return x
+    test_loader = torch.utils.data.DataLoader(
+        batch_size=args.bS,
+        dataset=test_data,
+        shuffle=False,
+        num_workers=0,      ### 原本：4，修改以避免 pickle error
+        # collate_fn=lambda x: x  # now dictionary values are not merged!
+        collate_fn=identify  # now dictionary values are not merged!
+    )
+
     ## 4. Build & Load models
     if not args.trained:
         model, model_bert, tokenizer, bert_config = get_models(args, BERT_PT_PATH)
@@ -761,3 +765,20 @@ if __name__ == '__main__':
                 num_target_layers=args.num_target_layers,
                 beam_size=1, show_table=False, show_answer_only=False
             )
+
+    ### 2022-03-03 test
+    with torch.no_grad():
+        acc_test, results_test, cnt_list = test(test_loader,
+                                                test_table,
+                                                model,
+                                                model_bert,
+                                                bert_config,
+                                                tokenizer,
+                                                args.max_seq_length,
+                                                args.num_target_layers,
+                                                detail=False,
+                                                path_db=path_wikisql,
+                                                st_pos=0,
+                                                dset_name='test', EG=args.EG)
+
+    print_result(acc_test, 'test')

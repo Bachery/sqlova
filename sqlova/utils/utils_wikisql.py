@@ -90,20 +90,25 @@ def load_w2i_wemb(path_wikisql, bert=False):
     return w2i, wemb
 
 def get_loader_wikisql(data_train, data_dev, bS, shuffle_train=True, shuffle_dev=False):
+    def identify(x):
+        return x
+    
     train_loader = torch.utils.data.DataLoader(
         batch_size=bS,
         dataset=data_train,
         shuffle=shuffle_train,
-        num_workers=4,
+        num_workers=0,      ### 原本：4，修改以避免 pickle error
         collate_fn=lambda x: x  # now dictionary values are not merged!
+        # collate_fn=identify  # now dictionary values are not merged!
     )
 
     dev_loader = torch.utils.data.DataLoader(
         batch_size=bS,
         dataset=data_dev,
         shuffle=shuffle_dev,
-        num_workers=4,
+        num_workers=0,      ### 原本：4，修改以避免 pickle error
         collate_fn=lambda x: x  # now dictionary values are not merged!
+        # collate_fn=identify  # now dictionary values are not merged!
     )
 
     return train_loader, dev_loader
