@@ -5,6 +5,9 @@ bert/__pycache__
 .idea
 *.swp
 
+sqlova/__pycache__/*
+sqlova/model/__pycache__/*
+
 .DS_Store
 .vscode
 data_and_model/*

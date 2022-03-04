@@ -655,15 +655,15 @@ if __name__ == '__main__':
     train_data, train_table, dev_data, dev_table, train_loader, dev_loader = get_data(path_wikisql, args)
     ### 2022-03-03 test
     test_data, test_table = load_wikisql_data(path_wikisql, mode='test', toy_model=args.toy_model, toy_size=args.toy_size, no_hs_tok=True)
-    def identify(x):
-        return x
+    # def identify(x):
+    #     return x
     test_loader = torch.utils.data.DataLoader(
         batch_size=args.bS,
         dataset=test_data,
         shuffle=False,
-        num_workers=0,      ### 原本：4，修改以避免 pickle error
-        # collate_fn=lambda x: x  # now dictionary values are not merged!
-        collate_fn=identify  # now dictionary values are not merged!
+        num_workers=4,      ### 原本：4，修改以避免 pickle error
+        collate_fn=lambda x: x  # now dictionary values are not merged!
+        # collate_fn=identify  # now dictionary values are not merged!
     )
 
     ## 4. Build & Load models
@@ -781,4 +781,4 @@ if __name__ == '__main__':
                                                 st_pos=0,
                                                 dset_name='test', EG=args.EG)
 
-    print_result(acc_test, 'test')
+    print_result('TEST', acc_test, 'test')
