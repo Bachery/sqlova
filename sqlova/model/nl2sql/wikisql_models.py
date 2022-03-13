@@ -42,15 +42,15 @@ class Seq2SQL_v1(nn.Module):
                 show_p_sc=False, show_p_sa=False,
                 show_p_wn=False, show_p_wc=False, show_p_wo=False, show_p_wv=False):
 
-        # sc
+        # sc (bS * max(l_hs))
         s_sc = self.scp(wemb_n, l_n, wemb_hpu, l_hpu, l_hs, show_p_sc=show_p_sc)
 
         if g_sc:
             pr_sc = g_sc
         else:
-            pr_sc = pred_sc(s_sc)
+            pr_sc = pred_sc(s_sc)   # (bS * 1) 概率最大的column
 
-        # sa
+        # sa （bS * 6)
         s_sa = self.sap(wemb_n, l_n, wemb_hpu, l_hpu, l_hs, pr_sc, show_p_sa=show_p_sa)
         if g_sa:
             # it's not necessary though.
@@ -59,7 +59,7 @@ class Seq2SQL_v1(nn.Module):
             pr_sa = pred_sa(s_sa)
 
 
-        # wn
+        # wn (bS * 5) 450/467行设置了最大值 5
         s_wn = self.wnp(wemb_n, l_n, wemb_hpu, l_hpu, l_hs, show_p_wn=show_p_wn)
 
         if g_wn:
@@ -67,7 +67,7 @@ class Seq2SQL_v1(nn.Module):
         else:
             pr_wn = pred_wn(s_wn)
 
-        # wc
+        # wc (bS * max(l_hs))
         s_wc = self.wcp(wemb_n, l_n, wemb_hpu, l_hpu, l_hs, show_p_wc=show_p_wc, penalty=True)
 
         if g_wc:
@@ -75,7 +75,7 @@ class Seq2SQL_v1(nn.Module):
         else:
             pr_wc = pred_wc(pr_wn, s_wc)
 
-        # wo
+        # wo (bS * 4 * 4) 4个where语句*4种operation
         s_wo = self.wop(wemb_n, l_n, wemb_hpu, l_hpu, l_hs, wn=pr_wn, wc=pr_wc, show_p_wo=show_p_wo)
 
         if g_wo:
@@ -83,7 +83,8 @@ class Seq2SQL_v1(nn.Module):
         else:
             pr_wo = pred_wo(pr_wn, s_wo)
 
-        # wv
+        # wv (bS * 4 * max(l_n问题长度) * num_)
+        # s_wv = [B, max_wn, max_nlu_tokens, 2]
         s_wv = self.wvp(wemb_n, l_n, wemb_hpu, l_hpu, l_hs, wn=pr_wn, wc=pr_wc, wo=pr_wo, show_p_wv=show_p_wv)
 
         return s_sc, s_sa, s_wn, s_wc, s_wo, s_wv
@@ -901,6 +902,7 @@ class WVP_se(nn.Module):
             if l_n1 < mL_n:
                 s_wv[b, :, l_n1:, :] = -10000000000
         return s_wv
+
 
 def Loss_sw_se(s_sc, s_sa, s_wn, s_wc, s_wo, s_wv, g_sc, g_sa, g_wn, g_wc, g_wo, g_wvi):
     """

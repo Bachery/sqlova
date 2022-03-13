@@ -39,7 +39,7 @@ def construct_hyper_param(parser):
     parser.add_argument("--accumulate_gradients", default=2, type=int,       ### 原本：1
                         help="The number of accumulation of backpropagation to effectivly increase the batch size.")
     parser.add_argument('--fine_tune',
-                        default=True,       ### 原本：False
+                        default=True,       ### 原本：False，不训练BERT模型
                         action='store_true',
                         help="If present, BERT is trained.")
 
@@ -107,7 +107,7 @@ def construct_hyper_param(parser):
         torch.cuda.manual_seed_all(args.seed)
 
     # args.toy_model = not torch.cuda.is_available()
-    args.toy_model = False
+    args.toy_model = False  ### toy_model 为True时，只取数据的一小部分
     args.toy_size = 12
 
     return args
@@ -198,6 +198,9 @@ def get_models(args, BERT_PT_PATH, trained=False, path_model_bert=None, path_mod
 
 
 def get_data(path_wikisql, args):
+    # TODO  因为默认no_w2i=True，最后两个变量为None
+    ####    如果不是，要读取w2i.json和wemb.npy文件返回
+    # 因为默认no_hs_tok=True，读取的table数据文件为不带'_tok'的版本（带'_tok'的也没给）
     train_data, train_table, dev_data, dev_table, _, _ = load_wikisql(path_wikisql, args.toy_model, args.toy_size,
                                                                       no_w2i=True, no_hs_tok=True)
     train_loader, dev_loader = get_loader_wikisql(train_data, dev_data, args.bS, shuffle_train=True)
@@ -233,13 +236,13 @@ def train(train_loader, train_table, model, model_bert, opt, bert_config, tokeni
             continue
         # Get fields
         nlu, nlu_t, sql_i, sql_q, sql_t, tb, hs_t, hds = get_fields(t, train_table, no_hs_t=True, no_sql_t=True)
-        # nlu  : natural language utterance
-        # nlu_t: tokenized nlu
-        # sql_i: canonical form of SQL query
-        # sql_q: full SQL query text. Not used.
-        # sql_t: tokenized SQL query
-        # tb   : table
-        # hs_t : tokenized headers. Not used.
+        # nlu  : natural language utterance     [list of str]
+        # nlu_t: tokenized nlu                  [list of list of str]
+        # sql_i: canonical form of SQL query    [list of dict]
+        # sql_q: full SQL query text. Not used. [list of dict]
+        # sql_t: tokenized SQL query. Not used. [list of None]
+        # tb   : table                          [list of dict]
+        # hs_t : tokenized headers. Not used.   [list of empty list]
 
         g_sc, g_sa, g_wn, g_wc, g_wo, g_wv = get_g(sql_i)
         # get ground truth where-value index under CoreNLP tokenization scheme. It's done already on trainset.
@@ -250,8 +253,8 @@ def train(train_loader, train_table, model, model_bert, opt, bert_config, tokeni
             = get_wemb_bert(bert_config, model_bert, tokenizer, nlu_t, hds, max_seq_length,
                             num_out_layers_n=num_target_layers, num_out_layers_h=num_target_layers)
 
-        # wemb_n: natural language embedding
-        # wemb_h: header embedding
+        # wemb_n: natural language embedding    # tensor (bS        * max(l_n)   * (hS*num_out_layers_n))
+        # wemb_h: header embedding              # tensor (sum(l_hs) * max(l_hpu) * (hS*num_out_layers_h))
         # l_n: token lengths of each question
         # l_hpu: header token lengths
         # l_hs: the number of columns (headers) of the tables.
@@ -655,8 +658,6 @@ if __name__ == '__main__':
     train_data, train_table, dev_data, dev_table, train_loader, dev_loader = get_data(path_wikisql, args)
     ### 2022-03-03 test
     test_data, test_table = load_wikisql_data(path_wikisql, mode='test', toy_model=args.toy_model, toy_size=args.toy_size, no_hs_tok=True)
-    # def identify(x):
-    #     return x
     test_loader = torch.utils.data.DataLoader(
         batch_size=args.bS,
         dataset=test_data,
@@ -782,3 +783,4 @@ if __name__ == '__main__':
                                                 dset_name='test', EG=args.EG)
 
     print_result('TEST', acc_test, 'test')
+

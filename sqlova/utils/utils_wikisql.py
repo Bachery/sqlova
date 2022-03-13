@@ -58,17 +58,13 @@ def load_wikisql_data(path_wikisql, mode='train', toy_model=False, toy_size=10, 
     table = {}
     with open(path_sql) as f:
         for idx, line in enumerate(f):
-            if toy_model and idx >= toy_size:
-                break
-
+            if toy_model and idx >= toy_size: break
             t1 = json.loads(line.strip())
             data.append(t1)
 
     with open(path_table) as f:
         for idx, line in enumerate(f):
-            if toy_model and idx > toy_size:
-                break
-
+            if toy_model and idx > toy_size: break
             t1 = json.loads(line.strip())
             table[t1['id']] = t1
 
@@ -89,17 +85,14 @@ def load_w2i_wemb(path_wikisql, bert=False):
         wemb = load(os.path.join(path_wikisql, 'wemb.npy'), )
     return w2i, wemb
 
+
 def get_loader_wikisql(data_train, data_dev, bS, shuffle_train=True, shuffle_dev=False):
-    # def identify(x):
-    #     return x
-    
     train_loader = torch.utils.data.DataLoader(
         batch_size=bS,
         dataset=data_train,
         shuffle=shuffle_train,
         num_workers=4,      ### 原本：4，修改以避免 pickle error
         collate_fn=lambda x: x  # now dictionary values are not merged!
-        # collate_fn=identify  # now dictionary values are not merged!
     )
 
     dev_loader = torch.utils.data.DataLoader(
@@ -108,7 +101,6 @@ def get_loader_wikisql(data_train, data_dev, bS, shuffle_train=True, shuffle_dev
         shuffle=shuffle_dev,
         num_workers=4,      ### 原本：4，修改以避免 pickle error
         collate_fn=lambda x: x  # now dictionary values are not merged!
-        # collate_fn=identify  # now dictionary values are not merged!
     )
 
     return train_loader, dev_loader
@@ -133,6 +125,7 @@ def get_fields_1(t1, tables, no_hs_t=False, no_sql_t=False):
     hs1 = tb1['header']
 
     return nlu1, nlu_t1, tid1, sql_i1, sql_q1, sql_t1, tb1, hs_t1, hs1
+
 
 def get_fields(t1s, tables, no_hs_t=False, no_sql_t=False):
 
@@ -498,7 +491,7 @@ def generate_inputs(tokenizer, nlu1_tok, hds1):
     tokens.append("[SEP]")
     segment_ids.append(0)
 
-    i_hds = []
+    i_hds = []      # 加上每个header之前和之后的token的长度
     # for doc
     for i, hds11 in enumerate(hds1):
         i_st_hd = len(tokens)
@@ -755,7 +748,7 @@ def get_bert_output(model_bert, tokenizer, nlu_t, hds, max_seq_length):
     # 4. Generate BERT output.
     all_encoder_layer, pooled_output = model_bert(all_input_ids, all_segment_ids, all_input_mask)
 
-    # 5. generate l_hpu from i_hds
+    # 5. generate l_hpu from i_hds  ### 表格header每一项的token长度
     l_hpu = gen_l_hpu(i_hds)
 
     return all_encoder_layer, pooled_output, tokens, i_nlu, i_hds, \
@@ -820,12 +813,14 @@ def get_wemb_bert(bert_config, model_bert, tokenizer, nlu_t, hds, max_seq_length
     all_encoder_layer, pooled_output, tokens, i_nlu, i_hds,\
     l_n, l_hpu, l_hs, \
     nlu_tt, t_to_tt_idx, tt_to_t_idx = get_bert_output(model_bert, tokenizer, nlu_t, hds, max_seq_length)
-    # all_encoder_layer: BERT outputs from all layers.
-    # pooled_output: output of [CLS] vec.
+    # all_encoder_layer: BERT outputs from all layers.  ### list(隐藏层数量12) of tensors(bS * 222 * 768(隐藏层大小))
+    # pooled_output: output of [CLS] vec.               ### tensor(bS * 768(隐藏层大小)）
     # tokens: BERT intput tokens
     # i_nlu: start and end indices of question in tokens
     # i_hds: start and end indices of headers
-
+    # l_n: token lengths of each question
+    # l_hpu: header token lengths
+    # l_hs: the number of columns (headers) of the tables.
 
     # get the wemb
     wemb_n = get_wemb_n(i_nlu, l_n, bert_config.hidden_size, bert_config.num_hidden_layers, all_encoder_layer,
