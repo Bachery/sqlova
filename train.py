@@ -31,7 +31,7 @@ def construct_hyper_param(parser):
     parser.add_argument('--do_infer', default=False, action='store_true')
     parser.add_argument('--infer_loop', default=False, action='store_true')
 
-    parser.add_argument("--trained", default=False, action='store_true')
+    parser.add_argument("--trained", default=True, action='store_true')    ### 原本：False
 
     parser.add_argument('--tepoch', default=200, type=int)
     parser.add_argument("--bS", default=16, type=int,       ### 原本：32
@@ -672,8 +672,8 @@ if __name__ == '__main__':
         model, model_bert, tokenizer, bert_config = get_models(args, BERT_PT_PATH)
     else:
         # To start from the pre-trained models, un-comment following lines.
-        path_model_bert = './data_and_model/model_bert_best.pt'
-        path_model = './data_and_model/model_best.pt'
+        path_model_bert = './model_bert_best.pt'#'./data_and_model/model_bert_best.pt'
+        path_model = './model_best.pt'#'./data_and_model/model_best.pt'
         model, model_bert, tokenizer, bert_config = get_models(args, BERT_PT_PATH, trained=True,
                                                                path_model_bert=path_model_bert, path_model=path_model)
 
