@@ -5,8 +5,9 @@ bert/__pycache__
 .idea
 *.swp
 
-sqlova/__pycache__/*
-sqlova/model/__pycache__/*
+model_bert_best.pt
+model_best.pt
+results_dev.jsonl
 
 .DS_Store
 .vscode
