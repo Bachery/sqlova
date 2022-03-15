@@ -56,6 +56,7 @@ def my_predict( data_loader, data_table,
 	model_bert.eval()
 
 	# engine = DBEngine(os.path.join(path_db, f"{dset_name}.db"))
+	engine = DBEngine(path_db)
 	results = []
 	for _, t in enumerate(data_loader):
 		nlu, nlu_t, tb, hds = my_get_fields(t, data_table)
@@ -209,7 +210,7 @@ if __name__ == '__main__':
 							 num_target_layers=args.num_target_layers,
 							 path_db=db_path,
 							 dset_name=dset_name,
-							 EG=args.EG,
+							 EG=True,	#args.EG,
 							 )
 
 	# save results
