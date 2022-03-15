@@ -20,15 +20,15 @@ def get_args():
 	# parser.add_argument("--bert_path", required=True, help='path to bert files (bert_config*.json etc)')
 	# parser.add_argument("--data_path", required=True, help='path to *.jsonl and *.db files')
 	# parser.add_argument("--split", required=True, help='prefix of jsonl and db files (e.g. dev)')
-	parser.add_argument("--result_path", required=True, help='directory in which to place results')
+	# parser.add_argument("--result_path", required=True, help='directory in which to place results')
 	args = construct_hyper_param(parser)
 	return args
 
 
 def load_models(args):
 	BERT_PT_PATH	= './data_and_model'
-	path_model_bert	= './data_and_model/model_bert_best.pt'
-	path_model		= './data_and_model/model_best.pt'
+	path_model_bert	= './model_bert_best.pt'
+	path_model		= './model_best.pt'
 	model, model_bert, tokenizer, bert_config = get_models(args, BERT_PT_PATH, True, path_model_bert, path_model)
 	return model, model_bert, tokenizer, bert_config
 
@@ -55,7 +55,7 @@ def my_predict( data_loader, data_table,
 	model.eval()
 	model_bert.eval()
 
-	engine = DBEngine(os.path.join(path_db, f"{dset_name}.db"))
+	# engine = DBEngine(os.path.join(path_db, f"{dset_name}.db"))
 	results = []
 	for _, t in enumerate(data_loader):
 		nlu, nlu_t, tb, hds = my_get_fields(t, data_table)
@@ -95,7 +95,7 @@ def my_predict( data_loader, data_table,
 			results1["sql"] = pr_sql_q1
 			results.append(results1)
 
-	return results()
+	return results
 
 
 #### deal with data ###################
@@ -167,7 +167,7 @@ def prepare_data():
 	for i in range(len(nlu)):
 		data.append({
 			'question':		nlu[i],
-			'question_tok':	nlu_t,
+			'question_tok':	nlu_t[i],
 			'table_id':		tbid[i],
 		})
 	
