@@ -1,0 +1,372 @@
+[
+    {
+        "task": "value",
+        "text": "Products A and B were launched in 2008 at price points of $360+",
+        "position": [
+            0,
+            63
+        ],
+        "time": [
+            10,
+            5320
+        ],
+        "reference": [
+            {
+                "type": "ref",
+                "text": "Products A and B were launched in 2008",
+                "markID": [
+                    "point_1_0",
+                    "point_1_2"
+                ],
+                "SQL": "",
+                "position": [
+                    0,
+                    38
+                ],
+                "time": [
+                    10,
+                    2680
+                ]
+            },
+            {
+                "type": "ref",
+                "text": "at price points of $360+",
+                "markID": [
+                    "text_2_0",
+                    "text_2_2",
+                    "text_3_0",
+                    "text_3_2",
+                    "rule_4_0",
+                    "rule_4_2"
+                ],
+                "position": [
+                    39,
+                    63
+                ],
+                "time": [
+                    2690,
+                    5320
+                ]
+            }
+        ]
+    },
+    {
+        "task": "value",
+        "text": "They have been priced similarly over time, with B consistently slightly lower than A",
+        "position": [
+            65,
+            84
+        ],
+        "time": [
+            5700,
+            10960
+        ],
+        "reference": [
+            {
+                "type": "ref",
+                "text": "They have been priced similarly over time",
+                "markID": [
+                    "line_0_0",
+                    "line_0_1"
+                ],
+                "SQL": "",
+                "position": [
+                    65,
+                    106
+                ],
+                "time": [
+                    5700,
+                    7930
+                ]
+            }
+        ]
+    },
+    {
+        "task": "value",
+        "text": "In 2014, products A and B were priced at $260 and $250, respectively",
+        "position": [
+            151,
+            68
+        ],
+        "time": [
+            10970,
+            19370
+        ],
+        "reference": [
+            {
+                "type": "ref",
+                "text": "In 2014, Products A and B",
+                "markID": [
+                    "point_1_1",
+                    "point_1_3"
+                ],
+                "SQL": "",
+                "position": [
+                    151,
+                    176
+                ],
+                "time": [
+                    10970,
+                    13320
+                ]
+            },
+            {
+                "type": "ref",
+                "text": "$260 and $250",
+                "markID": [
+                    "text_2_1",
+                    "text_2_3",
+                    "text_3_1",
+                    "text_3_3",
+                    "rule_4_1",
+                    "rule_4_3"
+                ],
+                "SQL": "",
+                "position": [
+                    192,
+                    205
+                ],
+                "time": [
+                    14010,
+                    17320
+                ]
+            }
+        ]
+    },
+    {
+        "task": "value",
+        "text": "Products C, D, and E were each introduced later at much lower price points",
+        "position": [
+            221,
+            74
+        ],
+        "time": [
+            19380,
+            24050
+        ],
+        "reference": [
+            {
+                "type": "ref",
+                "text": "Products C, D, and E were each introduced later",
+                "markID": [
+                    "point_1_4",
+                    "point_1_5",
+                    "point_1_6"
+                ],
+                "SQL": "",
+                "position": [
+                    221,
+                    268
+                ],
+                "time": [
+                    19380,
+                    21970
+                ]
+            },
+            {
+                "type": "ref",
+                "text": "at much lower price points",
+                "markID": [
+                    "text_2_4",
+                    "text_2_5",
+                    "text_2_6",
+                    "text_3_4",
+                    "text_3_5",
+                    "text_3_6",
+                    "rule_4_4",
+                    "rule_4_5",
+                    "rule_4_6"
+                ],
+                "SQL": "",
+                "position": [
+                    269,
+                    295
+                ],
+                "time": [
+                    22460,
+                    24050
+                ]
+            }
+        ]
+    },
+    {
+        "task": "trend",
+        "text": "but all have increased in price since their respective launches",
+        "position": [
+            297,
+            63
+        ],
+        "time": [
+            24170,
+            27160
+        ],
+        "reference": [
+            {
+                "type": "ref",
+                "text": "but all have increased",
+                "markID": [
+                    "line_0_2",
+                    "line_0_3",
+                    "line_0_4",
+                    "line_5_0"
+                ],
+                "SQL": "",
+                "position": [
+                    297,
+                    319
+                ],
+                "time": [
+                    24170,
+                    25280
+                ]
+            }
+        ]
+    },
+    {
+        "task": "trend",
+        "text": "In fact, with the launch of a new product in this space, we tend to see an initial price increase, followed by a decrease over time",
+        "position": [
+            362,
+            131
+        ],
+        "time": [
+            27840,
+            35600
+        ],
+        "reference": [
+            {
+                "type": "ref",
+                "text": "an initial price increase, followed by a decrease over time",
+                "markID": [
+                    "line_0_2",
+                    "line_0_3",
+                    "line_0_4",
+                    "line_6_0"
+                ],
+                "SQL": "",
+                "position": [
+                    434,
+                    493
+                ],
+                "time": [
+                    32100,
+                    35600
+                ]
+            }
+        ]
+    },
+    {
+        "task": "aggregation",
+        "text": "As of 2014, retail prices have converged, with an average retail price of $223, ranging from a low of $180 to a high of $260",
+        "position": [
+            495,
+            124
+        ],
+        "time": [
+            35890,
+            47870
+        ],
+        "reference": [
+            {
+                "type": "ref",
+                "text": "As of 2014, retail prices",
+                "markID": [
+                    "point_7_0",
+                    "point_7_1",
+                    "point_7_2",
+                    "point_7_3",
+                    "point_7_4"
+                ],
+                "SQL": "",
+                "position": [
+                    495,
+                    520
+                ],
+                "time": [
+                    35890,
+                    38360
+                ]
+            },
+            {
+                "type": "ref",
+                "text": "an average retail price",
+                "markID": [
+                    "point_8_0",
+                    "text_9_0",
+                    "text_10_0",
+                    "rule_11_0"
+                ],
+                "position": [
+                    542,
+                    565
+                ],
+                "time": [
+                    39810,
+                    40720
+                ]
+            },
+            {
+                "type": "ref",
+                "text": "from a low of $180 to a high of $260.",
+                "markID": [
+                    "rect_12_0"
+                ],
+                "position": [
+                    494,
+                    531
+                ],
+                "time": [
+                    43600,
+                    47870
+                ]
+            }
+        ]
+    },
+    {
+        "task": "value",
+        "text": "To be competitive, we recommend introducing our product below the $223 average price point in the $150-$200 range.",
+        "position": [
+            621,
+            114
+        ],
+        "time": [
+            48170,
+            58280
+        ],
+        "reference": [
+            {
+                "type": "ref",
+                "text": "below the $223 average price point",
+                "markID": [
+                    "text_13_0",
+                    "text_14_0",
+                    "rule_15_0"
+                ],
+                "SQL": "",
+                "position": [
+                    677,
+                    711
+                ],
+                "time": [
+                    51490,
+                    54520
+                ]
+            },
+            {
+                "type": "ref",
+                "text": "in the $150-$200 range.",
+                "markID": [
+                    "rect_16_0"
+                ],
+                "position": [
+                    712,
+                    735
+                ],
+                "time": [
+                    55050,
+                    58280
+                ]
+            }
+        ]
+    }
+]

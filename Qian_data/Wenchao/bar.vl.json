@@ -1,0 +1,33 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "description": "A grouped bar chart",
+    "width": 300,
+    "height": 200,
+    "data": {
+        "url": "data/03-bar_grouped/data.csv"
+    },
+    "mark": "bar",
+    "encoding": {
+        "x": { "field": "name", "type": "ordinal", "axis": null },
+        "column": {
+            "field": "year",
+            "type": "ordinal",
+            "header": { "orient": "bottom" },
+            "title": "Year"
+        },
+        "y": {
+            "field": "sales",
+            "type": "quantitative",
+            "axis": { "grid": false },
+            "title": "Sales (in Millions)",
+            "scale": { "domain": [0, 500] }
+        },
+        "color": {
+            "field": "name",
+            "type": "nominal",
+            "scale": { "range": ["#e7ba52", "#1f77b4", "#9467bd"] },
+            "title": ""
+        }
+    },
+    "config": { "view": { "stroke": "transparent" } }
+}

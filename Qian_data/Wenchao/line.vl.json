@@ -1,0 +1,31 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "description": "A line chart.",
+    "width": 400,
+    "height": 200,
+    "padding": 5,
+    "data": {
+        "url": "data/04-price_chart/data.csv"
+    },
+    "mark": "line",
+    "encoding": {
+        "x": {
+            "timeUnit": "year",
+            "field": "year",
+            "type": "ordinal",
+            "title": "Year"
+        },
+        "y": {
+            "field": "price",
+            "type": "quantitative",
+            "title": "Price"
+        },
+        "color": {
+            "field": "name",
+            "legend": null,
+            "scale": {
+                "range": ["#A0A0A0"]
+            }
+        }
+    }
+}

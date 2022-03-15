@@ -15,3 +15,4 @@ with open(path_table) as f:
     for idx, line in enumerate(f):
         t1 = json.loads(line.strip())
         table[t1['id']] = t1
+# %%

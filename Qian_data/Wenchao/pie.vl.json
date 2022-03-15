@@ -1,0 +1,40 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "description": "A simple pie chart with labels.",
+    "title": { "text": "Market Share of Mobile Phones in 2017" },
+    "width": 300,
+    "height": 300,
+    "data": {
+        "url": "data/02-pie_chart/data.csv"
+    },
+    "encoding": {
+        "theta": { "field": "value", "type": "quantitative", "stack": true },
+        "color": { "field": "category", "type": "nominal", "legend": null },
+        "order": { "field": "category", "type": "ordinal" }
+    },
+    "layer": [
+        { "mark": { "type": "arc", "outerRadius": 180, "align": "center" } },
+        {
+            "mark": {
+                "type": "text",
+                "radius": 135,
+                "align": "center",
+                "dy": 20,
+                "fontSize": 14
+            },
+            "encoding": {
+                "text": { "field": "value", "format": ",.0%" },
+                "color": { "value": "white" }
+            }
+        },
+        {
+            "mark": {
+                "type": "text",
+                "radius": 135,
+                "align": "center",
+                "fontSize": 14
+            },
+            "encoding": { "text": { "field": "category" }, "color": { "value": "white" } }
+        }
+    ]
+}
