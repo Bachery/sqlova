@@ -210,7 +210,7 @@ if __name__ == '__main__':
 							 num_target_layers=args.num_target_layers,
 							 path_db=db_path,
 							 dset_name=dset_name,
-							 EG=True,	#args.EG,
+							 EG=False,	#args.EG,
 							 )
 
 	# save results
